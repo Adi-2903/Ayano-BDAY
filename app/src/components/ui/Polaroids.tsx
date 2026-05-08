@@ -3,7 +3,27 @@ import { useFrame } from '@react-three/fiber';
 import { Float, Text } from '@react-three/drei';
 import * as THREE from 'three';
 
-const PolaroidFrame = ({ position, rotation, textureUrl, subtitle, speed, floatIntensity, active, onToggle }: any) => {
+interface PolaroidProps {
+  position: [number, number, number];
+  rotation: [number, number, number];
+  textureUrl: string;
+  subtitle: string;
+  speed: number;
+  floatIntensity: number;
+  active: boolean;
+  onToggle: () => void;
+}
+
+const PolaroidFrame: React.FC<PolaroidProps> = ({ 
+  position, 
+  rotation, 
+  textureUrl, 
+  subtitle, 
+  speed, 
+  floatIntensity, 
+  active, 
+  onToggle 
+}) => {
   const group = useRef<THREE.Group>(null);
   const [texture, setTexture] = React.useState<THREE.Texture | null>(null);
   
@@ -26,18 +46,18 @@ const PolaroidFrame = ({ position, rotation, textureUrl, subtitle, speed, floatI
     const damp = THREE.MathUtils.damp;
     
     if (active) {
-      // Bring to front but keep at a safe distance: Camera is at [0, 3, 12]. We target [0, 3, 5]
+      // Bring to front and center: Camera is at [0, 4, 18]. We target [0, 4, 10] for a big zoom
       group.current.position.x = damp(group.current.position.x, 0 - position[0], 5, delta);
-      group.current.position.y = damp(group.current.position.y, 3 - position[1], 5, delta);
-      group.current.position.z = damp(group.current.position.z, 5 - position[2], 5, delta);
+      group.current.position.y = damp(group.current.position.y, 4 - position[1], 5, delta);
+      group.current.position.z = damp(group.current.position.z, 10 - position[2], 5, delta);
       
       // Face straight to camera
       group.current.rotation.x = damp(group.current.rotation.x, 0, 5, delta);
       group.current.rotation.y = damp(group.current.rotation.y, 0, 5, delta);
       group.current.rotation.z = damp(group.current.rotation.z, 0, 5, delta);
       
-      // Scale appropriately so it fits on all screen sizes
-      group.current.scale.setScalar(damp(group.current.scale.x, 0.9, 5, delta));
+      // Scale up significantly
+      group.current.scale.setScalar(damp(group.current.scale.x, 1.2, 5, delta));
     } else {
       // Return to resting position
       group.current.position.x = damp(group.current.position.x, 0, 5, delta);
@@ -104,7 +124,7 @@ export const Polaroids: React.FC = () => {
   const [activeId, setActiveId] = React.useState<number | null>(null);
 
   // Deliberate curved arrangement behind the car
-  const polaroidsData = useMemo(() => {
+  const polaroidsData: (Omit<PolaroidProps, 'active' | 'onToggle'> & { id: number })[] = useMemo(() => {
     return [
       { id: 1, position: [-4, 2, -3], rotation: [0, 0.4, -0.05], speed: 1.5, floatIntensity: 0.5, textureUrl: '/photos/photo1.jpg', subtitle: 'Late Night movies' },
       { id: 2, position: [-2, 3, -4], rotation: [0, 0.2, 0.05], speed: 2, floatIntensity: 0.8, textureUrl: '/photos/photo2.jpg', subtitle: 'Monza Memories 🇮🇹' },

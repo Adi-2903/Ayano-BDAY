@@ -57,16 +57,16 @@ export const BirthdayOverlay: React.FC<BirthdayOverlayProps> = ({ isMuted, onTog
       </div>
 
       {/* Personal Message and Letter Button */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-center w-full px-4 flex flex-col sm:flex-row items-center justify-center gap-4">
-        <div className="inline-block glass-panel px-6 py-3 rounded-full pointer-events-auto shadow-[0_0_20px_rgba(220,0,0,0.15)]">
-          <p className="text-white text-lg tracking-wide font-light">
+      <div className="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 text-center w-[90%] max-w-xl px-2 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+        <div className="inline-block glass-panel px-4 sm:px-6 py-2 sm:py-3 rounded-full pointer-events-auto shadow-[0_0_20px_rgba(220,0,0,0.15)] whitespace-nowrap">
+          <p className="text-white text-sm sm:text-lg tracking-wide font-light">
             With love from Adi ❤️
           </p>
         </div>
         
         <button 
           onClick={() => setIsLetterOpen(true)}
-          className="pointer-events-auto px-6 py-3 bg-gradient-to-r from-[#DC0000] to-[#FF1801] text-white rounded-full font-bold tracking-widest uppercase text-sm shadow-[0_0_20px_rgba(220,0,0,0.4)] hover:shadow-[0_0_30px_rgba(220,0,0,0.6)] hover:scale-105 transition-all active:scale-95"
+          className="pointer-events-auto w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-[#DC0000] to-[#FF1801] text-white rounded-full font-bold tracking-widest uppercase text-[10px] sm:text-xs shadow-[0_0_25px_rgba(220,0,0,0.4)] hover:shadow-[0_0_35px_rgba(220,0,0,0.6)] hover:scale-105 transition-all active:scale-95 whitespace-nowrap"
         >
           Read Letter 💌
         </button>

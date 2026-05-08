@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, useProgress, AdaptiveDpr, PerformanceMonitor } from '@react-three/drei';
+import { OrbitControls, useProgress, AdaptiveDpr } from '@react-three/drei';
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 import { Environment } from './Environment';
 import { FerrariCar } from './FerrariCar';
@@ -33,7 +33,7 @@ const SceneInner: React.FC = () => {
         makeDefault
       />
       
-      <EffectComposer multisampling={0} disableNormalPass>
+      <EffectComposer multisampling={0}>
         <Bloom 
           luminanceThreshold={1} 
           mipmapBlur 
