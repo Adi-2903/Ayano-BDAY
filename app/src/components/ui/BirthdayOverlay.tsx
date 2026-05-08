@@ -8,10 +8,41 @@ interface BirthdayOverlayProps {
 
 export const BirthdayOverlay: React.FC<BirthdayOverlayProps> = ({ isMuted, onToggleMute }) => {
   const [isLetterOpen, setIsLetterOpen] = useState(false);
+  const [showHints, setShowHints] = useState(true);
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => setShowHints(false), 2500); // 2.5s for a smoother fade
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="absolute inset-0 pointer-events-none z-30 overflow-hidden">
       
+      {/* Start-up Tooltips (Fades out) */}
+      <div className={`absolute inset-0 transition-opacity duration-1000 ${showHints ? 'opacity-100' : 'opacity-0'}`}>
+        {/* Drag to Rotate Hint */}
+        <div className="absolute top-[45%] left-[20%] -translate-y-1/2 flex items-center gap-4">
+          <div className="text-right">
+            <p className="text-white/40 text-[10px] uppercase font-bold tracking-widest">Interaction</p>
+            <p className="text-white text-xl font-black italic tracking-tighter">DRAG TO ROTATE</p>
+          </div>
+          <div className="relative w-24 h-px bg-gradient-to-r from-white to-transparent">
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#DC0000] shadow-[0_0_10px_#DC0000]" />
+          </div>
+        </div>
+
+        {/* Scroll to Zoom Hint */}
+        <div className="absolute top-[55%] right-[20%] -translate-y-1/2 flex flex-row-reverse items-center gap-4">
+          <div className="text-left">
+            <p className="text-white/40 text-[10px] uppercase font-bold tracking-widest">Perspective</p>
+            <p className="text-white text-xl font-black italic tracking-tighter">SCROLL TO ZOOM</p>
+          </div>
+          <div className="relative w-24 h-px bg-gradient-to-l from-white to-transparent">
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#DC0000] shadow-[0_0_10px_#DC0000]" />
+          </div>
+        </div>
+      </div>
+
       {/* Top Gradient for text readability */}
       <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-black/80 to-transparent" />
       
@@ -23,28 +54,6 @@ export const BirthdayOverlay: React.FC<BirthdayOverlayProps> = ({ isMuted, onTog
         <h2 className="text-white/50 text-sm tracking-[0.5em] uppercase font-light">
           Garage 16 • Scuderia Ferrari
         </h2>
-      </div>
-
-      {/* Control Instructions */}
-      <div className="absolute top-6 left-6 text-left hidden sm:block">
-        <p className="text-white/40 text-[10px] tracking-[0.2em] uppercase font-bold mb-1">Race Controls</p>
-        <div className="flex flex-col gap-1">
-          <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#DC0000] animate-pulse" />
-            <p className="text-white/60 text-xs tracking-wider font-light">Scroll to <span className="text-white">Zoom</span></p>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#DC0000] animate-pulse" />
-            <p className="text-white/60 text-xs tracking-wider font-light">Drag to <span className="text-white">Rotate</span></p>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile-optimized version for controls (more compact) */}
-      <div className="absolute top-20 left-6 text-left sm:hidden">
-        <p className="text-white/60 text-[10px] tracking-widest font-light uppercase">
-          <span className="text-[#DC0000] font-bold">Pinch</span> Zoom • <span className="text-[#DC0000] font-bold">Drag</span> Rotate
-        </p>
       </div>
 
       {/* Personal Message and Letter Button */}
