@@ -29,7 +29,7 @@ const SceneInner: React.FC = () => {
         minPolarAngle={Math.PI / 4}
         maxPolarAngle={Math.PI / 2 + 0.1}
         minDistance={4}
-        maxDistance={15}
+        maxDistance={25}
         makeDefault
       />
       
@@ -70,7 +70,7 @@ export const Scene: React.FC = () => {
       <ErrorBoundary>
         <Canvas
           dpr={dpr}
-          camera={{ position: [0, 3, 12], fov: 45 }}
+          camera={{ position: [0, 4, 18], fov: 45 }}
           gl={{ 
             antialias: false, 
             powerPreference: "high-performance",
