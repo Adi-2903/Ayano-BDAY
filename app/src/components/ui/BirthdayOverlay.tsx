@@ -25,6 +25,28 @@ export const BirthdayOverlay: React.FC<BirthdayOverlayProps> = ({ isMuted, onTog
         </h2>
       </div>
 
+      {/* Control Instructions */}
+      <div className="absolute top-6 left-6 text-left hidden sm:block">
+        <p className="text-white/40 text-[10px] tracking-[0.2em] uppercase font-bold mb-1">Race Controls</p>
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#DC0000] animate-pulse" />
+            <p className="text-white/60 text-xs tracking-wider font-light">Scroll to <span className="text-white">Zoom</span></p>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#DC0000] animate-pulse" />
+            <p className="text-white/60 text-xs tracking-wider font-light">Drag to <span className="text-white">Rotate</span></p>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile-optimized version for controls (more compact) */}
+      <div className="absolute top-20 left-6 text-left sm:hidden">
+        <p className="text-white/60 text-[10px] tracking-widest font-light uppercase">
+          <span className="text-[#DC0000] font-bold">Pinch</span> Zoom • <span className="text-[#DC0000] font-bold">Drag</span> Rotate
+        </p>
+      </div>
+
       {/* Personal Message and Letter Button */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-center w-full px-4 flex flex-col sm:flex-row items-center justify-center gap-4">
         <div className="inline-block glass-panel px-6 py-3 rounded-full pointer-events-auto shadow-[0_0_20px_rgba(220,0,0,0.15)]">

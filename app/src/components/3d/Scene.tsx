@@ -61,7 +61,11 @@ const ProgressGate: React.FC<{ onReady: () => void }> = ({ onReady }) => {
 
 export const Scene: React.FC = () => {
   const [loaded, setLoaded] = React.useState(false);
-  const [dpr, setDpr] = React.useState(1.5);
+  
+  // Use stable callback to prevent re-renders of ProgressGate
+  const handleReady = React.useCallback(() => {
+    setLoaded(true);
+  }, []);
 
   return (
     <div className="w-full h-full absolute inset-0 z-0 bg-[#050505]">
@@ -69,7 +73,7 @@ export const Scene: React.FC = () => {
 
       <ErrorBoundary>
         <Canvas
-          dpr={dpr}
+          dpr={[1, 1.5]} // Capped at 1.5 for better performance on high-res mobile
           camera={{ position: [0, 4, 18], fov: 45 }}
           gl={{ 
             antialias: false, 
@@ -79,8 +83,7 @@ export const Scene: React.FC = () => {
             depth: true
           }}
         >
-          <PerformanceMonitor onDecline={() => setDpr(1)} onIncline={() => setDpr(2)} />
-          <ProgressGate onReady={() => setLoaded(true)} />
+          <ProgressGate onReady={handleReady} />
           <SceneInner />
         </Canvas>
       </ErrorBoundary>
