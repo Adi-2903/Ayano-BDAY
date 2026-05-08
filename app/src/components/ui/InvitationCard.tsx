@@ -18,14 +18,14 @@ export const InvitationCard: React.FC<InvitationCardProps> = ({ onStart }) => {
   };
 
   return (
-    <div className="absolute inset-0 z-40 flex items-center justify-center bg-black overflow-hidden">
+    <div className="absolute inset-0 z-40 flex items-center justify-center bg-black overflow-y-auto py-8">
       
       {/* Dynamic Background */}
-      <div className="absolute inset-0 bg-carbon opacity-80" />
-      <div className="absolute inset-0 bg-gradient-to-t from-[var(--ferrari-red)]/20 to-transparent opacity-50" />
+      <div className="fixed inset-0 bg-carbon opacity-80" />
+      <div className="fixed inset-0 bg-gradient-to-t from-[var(--ferrari-red)]/20 to-transparent opacity-50" />
       
       {/* Sparkles / Checkered Flag Particles */}
-      <div className="absolute inset-0 pointer-events-none">
+      <div className="fixed inset-0 pointer-events-none">
         {Array.from({ length: 30 }).map((_, i) => (
           <div 
             key={i}
@@ -43,7 +43,7 @@ export const InvitationCard: React.FC<InvitationCardProps> = ({ onStart }) => {
       </div>
 
       {/* The Card */}
-      <div className="relative z-10 w-[90vw] max-w-md aspect-[3/4] rounded-2xl glass-panel animate-float flex flex-col items-center justify-between p-8 text-center shadow-[0_0_50px_rgba(220,0,0,0.15)] overflow-hidden">
+      <div className="relative z-10 w-[92vw] max-w-md my-auto rounded-2xl glass-panel animate-float flex flex-col items-center gap-8 p-8 md:p-10 text-center shadow-[0_0_50px_rgba(220,0,0,0.15)]">
         
         {/* Glow behind card */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-[var(--ferrari-red)]/20 blur-[60px] pointer-events-none rounded-full" />
