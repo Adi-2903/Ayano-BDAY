@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, useProgress } from '@react-three/drei';
+import { OrbitControls, useProgress, AdaptiveDpr, PerformanceMonitor } from '@react-three/drei';
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 import { Environment } from './Environment';
 import { FerrariCar } from './FerrariCar';
@@ -9,20 +9,19 @@ import { Polaroids } from '../ui/Polaroids';
 import { ErrorBoundary } from '../core/ErrorBoundary';
 import { LoadingScreen } from './LoadingScreen';
 
-// Wrapper so useProgress works inside the React tree (must be inside Canvas context)
-// We render LoadingScreen outside Canvas using a portal-like pattern
 const SceneInner: React.FC = () => {
   return (
     <Suspense fallback={null}>
       <Environment />
       
       {/* Cinematic Lighting */}
-      <ambientLight intensity={1.5} />
-      <spotLight position={[5, 10, 5]} intensity={500} color="#DC0000" penumbra={1} decay={2} />
+      <ambientLight intensity={1.2} />
+      <spotLight position={[5, 10, 5]} intensity={300} color="#DC0000" penumbra={1} decay={2} />
       
       <FerrariCar />
       <FloatingElements />
       <Polaroids />
+      
       <OrbitControls
         enablePan={false}
         enableZoom={true}
@@ -31,41 +30,56 @@ const SceneInner: React.FC = () => {
         maxPolarAngle={Math.PI / 2 + 0.1}
         minDistance={4}
         maxDistance={15}
+        makeDefault
       />
       
-      {/* Cinematic Post-Processing Restored */}
-      <EffectComposer multisampling={4}>
-        <Bloom luminanceThreshold={0.5} luminanceSmoothing={0.9} intensity={1.5} mipmapBlur />
+      <EffectComposer multisampling={0} disableNormalPass>
+        <Bloom 
+          luminanceThreshold={1} 
+          mipmapBlur 
+          intensity={0.5} 
+          radius={0.4}
+        />
         <Vignette eskil={false} offset={0.1} darkness={1.1} />
       </EffectComposer>
+
+      <AdaptiveDpr pixelated />
     </Suspense>
   );
 };
 
-// Reads progress — must be rendered inside a component that is a sibling/child of Canvas
 const ProgressGate: React.FC<{ onReady: () => void }> = ({ onReady }) => {
   const { progress } = useProgress();
   React.useEffect(() => {
-    if (progress === 100) onReady();
+    if (progress === 100) {
+      const timer = setTimeout(onReady, 500);
+      return () => clearTimeout(timer);
+    }
   }, [progress, onReady]);
   return null;
 };
 
 export const Scene: React.FC = () => {
   const [loaded, setLoaded] = React.useState(false);
+  const [dpr, setDpr] = React.useState(1.5);
 
   return (
     <div className="w-full h-full absolute inset-0 z-0 bg-[#050505]">
-      {/* Loading Screen rendered over canvas — disappears when loaded */}
       {!loaded && <LoadingScreen />}
 
       <ErrorBoundary>
         <Canvas
-          dpr={[1, 2]}
+          dpr={dpr}
           camera={{ position: [0, 3, 12], fov: 45 }}
-          gl={{ antialias: false, powerPreference: "high-performance" }}
-          shadows
+          gl={{ 
+            antialias: false, 
+            powerPreference: "high-performance",
+            alpha: false,
+            stencil: false,
+            depth: true
+          }}
         >
+          <PerformanceMonitor onDecline={() => setDpr(1)} onIncline={() => setDpr(2)} />
           <ProgressGate onReady={() => setLoaded(true)} />
           <SceneInner />
         </Canvas>

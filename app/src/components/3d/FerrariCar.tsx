@@ -9,21 +9,27 @@ export const FerrariCar: React.FC = () => {
 
   // useGLTF will suspend until the 29MB model is fully loaded
   // The LoadingScreen will show the progress automatically!
-  const gltf = useGLTF('/models/F1/gltf/F1.gltf');
-  const scene = gltf.scene;
+  const { scene } = useGLTF('/models/F1/gltf/F1.gltf');
 
-  // Apply materials fix to make the red pop
-  scene.traverse((child) => {
-    if (child instanceof THREE.Mesh) {
-      child.castShadow = true;
-      child.receiveShadow = true;
-      if (child.material && child.material.color && child.material.color.getHexString() === 'some_red_hex') {
-         child.material.color.set('#DC0000');
-         child.material.emissive.set('#DC0000');
-         child.material.emissiveIntensity = 0.2;
+  // Apply materials fix only once
+  React.useMemo(() => {
+    scene.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        child.castShadow = true;
+        child.receiveShadow = true;
+        
+        // Optimizing materials for performance
+        if (child.material) {
+          child.material.precision = 'lowp';
+          if (child.material.color && child.material.color.getHexString() === 'some_red_hex') {
+            child.material.color.set('#DC0000');
+            child.material.emissive.set('#DC0000');
+            child.material.emissiveIntensity = 0.2;
+          }
+        }
       }
-    }
-  });
+    });
+  }, [scene]);
 
   useFrame((state) => {
     // 1. Initial dramatic spin (camera animation equivalent)
