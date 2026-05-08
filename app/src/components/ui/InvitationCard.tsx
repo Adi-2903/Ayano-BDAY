@@ -8,6 +8,11 @@ export const InvitationCard: React.FC<InvitationCardProps> = ({ onStart }) => {
   const revAudioRef = useRef<HTMLAudioElement | null>(null);
 
   const handleHover = () => {
+    // 1. Hardware Vibration (Mobile only)
+    if ('vibrate' in navigator) {
+      navigator.vibrate(40); // Short sharp pulse
+    }
+
     if (!revAudioRef.current) {
       revAudioRef.current = new Audio('/audio/f1_rev.mp3');
       revAudioRef.current.volume = 0.4;
@@ -78,6 +83,9 @@ export const InvitationCard: React.FC<InvitationCardProps> = ({ onStart }) => {
         <button 
           onMouseEnter={handleHover}
           onClick={() => {
+            if ('vibrate' in navigator) {
+              navigator.vibrate([100, 50, 100]); // Strong double pulse
+            }
             if (revAudioRef.current) revAudioRef.current.pause();
             onStart();
           }}
